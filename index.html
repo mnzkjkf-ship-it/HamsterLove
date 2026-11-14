@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HamsterLove Hub - เว็บไซต์บอกรักสุดพิเศษ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #ffe6eb 0%, #fff0f5 50%, #e6f2ff 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-color: #333333;
+            --primary-color: #ff6584;
+            --secondary-color: #ff8fa3;
+            --accent-color: #ffb3c1;
+            --shadow: 0 10px 30px rgba(255, 101, 132, 0.15);
+        }
+
+        .dark-mode {
+            --bg-gradient: linear-gradient(135deg, #1a1c23 0%, #2d2b3d 50%, #1f2a38 100%);
+            --card-bg: rgba(30, 30, 45, 0.85);
+            --text-color: #f0f0f5;
+            --primary-color: #ff7597;
+            --secondary-color: #ff8fa3;
+            --accent-color: #593d48;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-bottom: 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(255, 101, 132, 0.3);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: #ff476f;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Hamster Stage */
+        .hamster-stage {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            cursor: pointer;
+        }
+
+        .hamster-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .talking {
+            animation: talk 0.4s ease-in-out infinite alternate !important;
+        }
+
+        @keyframes talk {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.05) rotate(2deg); }
+        }
+
+        .heart-float {
+            position: absolute;
+            color: #ff3366;
+            font-size: 24px;
+            animation: floatUp 2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+        }
+
+        /* Controls & Form */
+        .controls-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        input[type="text"], textarea {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 15px;
+            border: 2px solid var(--accent-color);
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .dark-mode input[type="text"], .dark-mode textarea {
+            background: rgba(40, 40, 60, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            width: 100%;
+        }
+
+        .mode-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .mode-btn.active, .mode-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .speech-box {
+            margin-top: 15px;
+            padding: 15px 20px;
+            background: rgba(255, 101, 132, 0.1);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .gallery-item {
+            height: 120px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .music-player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🐹 HamsterLove Hub</h1>
+            <button class="btn" onclick="toggleDarkMode()">🌓 สลับโหมด</button>
+        </header>
+
+        <!-- Main Card -->
+        <div class="card">
+            <h2>น้องแฮมสเตอร์สุดน่ารัก พร้อมบอกรักคุณแฟนแล้ว! 💕</h2>
+            
+            <!-- Hamster Avatar -->
+            <div class="hamster-stage" id="hamsterStage" onclick="triggerLove()">
+                <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=400&auto=format&fit=crop&q=80" alt="Hamster" class="hamster-img" id="hamsterImg">
+            </div>
+
+            <!-- Speech Output -->
+            <div class="speech-box" id="speechBox">
+                "กดปุ่มด้านล่างเพื่อฟังเสียงน้องบอกรักหวานๆ ยาวๆ ได้เลยนะงับ! 💖"
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-group">
+                <div class="input-row">
+                    <input type="text" id="partnerName" placeholder="พิมพ์ชื่อเล่นแฟนของคุณที่นี่..." oninput="updateName()">
+                </div>
+
+                <div class="modes-grid">
+                    <button class="mode-btn active" onclick="setMode('sweet', this)">บอกรักซึ้งๆ</button>
+                    <button class="mode-btn" onclick="setMode('cute', this)">โหมดอ้อนแฟน</button>
+                    <button class="mode-btn" onclick="setMode('support', this)">ให้กำลังใจ</button>
+                </div>
+
+                <div class="input-row">
+                    <textarea id="customText" placeholder="หรือพิมพ์ข้อความบอกรักยาวๆ ที่อยากให้น้องอ่านออกเสียง..."></textarea>
+                </div>
+
+                <button class="btn" style="font-size: 1.1rem; padding: 14px;" onclick="speakLove()">💖 ฟังเสียงน้องบอกรักยาวๆ</button>
+            </div>
+        </div>
+
+        <!-- Music & Memory Card -->
+        <div class="card">
+            <h3>🎶 มุมกล่องดนตรีและความทรงจำ</h3>
+            <div class="music-player">
+                <span>🎵 เพลงกล่องดนตรีคลอเบาๆ</span>
+                <button class="btn" onclick="toggleMusic()" id="musicBtn">▶ เล่นเพลง</button>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=300&auto=format&fit=crop" alt="Memory"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=300&auto=format&fit=crop" alt="Memory"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=300&auto=format&fit=crop" alt="Memory"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Audio Simulation -->
+    <audio id="bgMusic" loop src="https://actions.google.com/sounds/v1/ambiences/relaxing_music.ogg"></audio>
+
+    <script>
+        let currentMode = 'sweet';
+        let customName = '';
+        let isPlayingMusic = false;
+
+        const scripts = {
+            sweet: "เธอรู้ไหม [partner] คือสิ่งที่ดีที่สุดในชีวิตของฉันเลยนะ ขอบคุณที่เข้ามาเติมเต็มทุกวันให้มีความหมาย รัก [partner] ที่สุดในโลกเลย สัญญาว่าจะอยู่ข้างๆ และดูแลแบบนี้ตลอดไปนะงับ",
+            cute: "งับๆๆ [partner] คนดีของเค้า วันนี้เหนื่อยไหมเอ่ย? มาให้กอดแน่นๆ ทีมนึงเร้ว! ถึงตัวจะเล็กแต่น้ำใจรักที่มีให้ [partner] มันใหญ่ยิ่งกว่าโลกใบนี้อีกนะ งู้ย รักที่สุดเบย!",
+            support: "[partner] คนเก่งของเค้า เก่งมากๆ เลยนะรู้ไหม ไม่ว่าจะเจอเรื่องอะไรยากแค่ไหน ขอให้จำไว้ว่ามีน้องแฮมสเตอร์ตัวนี้คอยเชียร์และเป็นกำลังใจให้อยู่ตรงนี้เสมอนะ สู้ๆ งับ!"
+        };
+
+        function updateName() {
+            customName = document.getElementById('partnerName').value.trim();
+        }
+
+        function setMode(mode, btn) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function getFullText() {
+            let customInput = document.getElementById('customText').value.trim();
+            let text = customInput !== "" ? customInput : scripts[currentMode];
+            let nameToUse = customName !== "" ? customName : "ที่รัก";
+            return text.replace(/\[partner\]/g, nameToUse);
+        }
+
+        function speakLove() {
+            if (!('speechSynthesis' in window)) {
+                alert('เบราว์เซอร์ของคุณไม่รองรับการสังเคราะห์เสียงพูด');
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+            const textToSpeak = getFullText();
+            document.getElementById('speechBox').innerText = `"${textToSpeak}"`;
+
+            const hamsterImg = document.getElementById('hamsterImg');
+            hamsterImg.classList.add('talking');
+            triggerLove();
+
+            // Split into sentences for smooth streaming reading
+            const sentences = textToSpeak.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [textToSpeak];
+            let index = 0;
+
+            function speakNext() {
+                if (index >= sentences.length) {
+                    hamsterImg.classList.remove('talking');
+                    return;
+                }
+
+                const utterance = new SpeechSynthesisUtterance(sentences[index]);
+                utterance.lang = 'th-TH';
+                utterance.rate = 0.95;
+                utterance.pitch = 1.1;
+
+                const voices = window.speechSynthesis.getVoices();
+                const thaiVoice = voices.find(v => v.lang.includes('th') || v.lang.includes('TH'));
+                if (thaiVoice) utterance.voice = thaiVoice;
+
+                utterance.onend = () => {
+                    index++;
+                    speakNext();
+                };
+
+                utterance.onerror = () => {
+                    hamsterImg.classList.remove('talking');
+                };
+
+                window.speechSynthesis.speak(utterance);
+            }
+
+            speakNext();
+        }
+
+        function triggerLove(event) {
+            const stage = document.getElementById('hamsterStage');
+            for (let i = 0; i < 5; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-float';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 150 + 'px';
+                heart.style.top = Math.random() * 50 + 'px';
+                stage.appendChild(heart);
+                setTimeout(() => heart.remove(), 2000);
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            if (isPlayingMusic) {
+                music.pause();
+                btn.innerText = "▶ เล่นเพลง";
+                isPlayingMusic = false;
+            } else {
+                music.play().catch(e => console.log("Audio play blocked"));
+                btn.innerText = "⏸ หยุดเพลง";
+                isPlayingMusic = true;
+            }
+        }
+    </script>
+</body>
+</html>
